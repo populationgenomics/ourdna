@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+"""Checks data transfer integrity by comparing MD5 checksums."""
+
 import csv
 import logging
-from google.cloud import storage
 import sys
+from google.cloud import storage
 
 BUCKET_NAME = 'cpg-mackenzie-main-upload'
 SUMMARY_FILE = 'garvan-mm-summary.txt'

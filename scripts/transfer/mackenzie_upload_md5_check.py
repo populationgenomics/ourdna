@@ -30,7 +30,7 @@ def main():
     if not summary_blob:
         logging.error(f'blob does not exist: {SUMMARY_FILE}')
         sys.exit(1)
-    summary = summary_blob.download_as_string()
+    summary = summary_blob.download_as_text()
 
     any_errors = False
     for line in summary.splitlines():
@@ -48,7 +48,7 @@ def main():
             logging.error(f'blob does not exist: {manifest_filename}')
             any_errors = True
             continue
-        manifest = manifest_blob.download_as_string()
+        manifest = manifest_blob.download_as_text()
 
         # Check every file listed in the manifest.
         tsv_reader = csv.DictReader(manifest.splitlines(), delimiter='\t')

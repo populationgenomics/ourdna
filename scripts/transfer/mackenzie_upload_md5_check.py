@@ -13,6 +13,7 @@ MANIFEST_SUFFIX = '/manifest.txt'
 FILENAME_COLUMN = 'filename'
 CHECKSUM_COLUMN = 'checksum'
 
+
 def main():
     """Main entrypoint."""
     logging.basicConfig(
@@ -53,7 +54,9 @@ def main():
         tsv_reader = csv.DictReader(manifest.splitlines(), delimiter='\t')
         for row in tsv_reader:
             # Filename is relative to the current directory.
-            full_filename = manifest_filename.split('/')[:-1] + '/' + row[FILENAME_COLUMN]
+            full_filename = (
+                manifest_filename.split('/')[:-1] + '/' + row[FILENAME_COLUMN]
+            )
             expected_md5 = row[CHECKSUM_COLUMN]
 
             # Read the checksum from the blob.
@@ -67,9 +70,11 @@ def main():
             if expected_md5 == actual_md5:
                 logging.info(f'match: {full_filename}')
             else:
-                logging.error(f'mismatch: {full_filename}, {expected_md5=}, {actual_md5=}')
+                logging.error(
+                    f'mismatch: {full_filename}, {expected_md5=}, {actual_md5=}'
+                )
                 any_errors = True
-    
+
     if any_errors:
         sys.exit(1)
 

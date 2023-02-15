@@ -51,12 +51,11 @@ def main():
         manifest = manifest_blob.download_as_text()
 
         # Check every file listed in the manifest.
+        # Filenames are relative to the current directory.
+        manifest_dir = manifest_filename[:manifest_filename.rfind('/') + 1]
         tsv_reader = csv.DictReader(manifest.splitlines(), delimiter='\t')
         for row in tsv_reader:
-            # Filename is relative to the current directory.
-            full_filename = (
-                manifest_filename.split('/')[:-1] + '/' + row[FILENAME_COLUMN]
-            )
+            full_filename = manifest_dir + row[FILENAME_COLUMN]
             expected_md5 = row[CHECKSUM_COLUMN]
 
             # Read the checksum from the blob.

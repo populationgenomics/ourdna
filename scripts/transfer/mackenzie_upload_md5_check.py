@@ -2,6 +2,8 @@
 
 """Checks data transfer integrity by comparing MD5 checksums."""
 
+import base64
+import binascii
 import csv
 import logging
 import sys
@@ -58,13 +60,15 @@ def main():
             full_filename = manifest_dir + row[FILENAME_COLUMN]
             expected_md5 = row[CHECKSUM_COLUMN]
 
-            # Read the checksum from the blob.
+            # Read the checksum from the blob. The checksum is base64-encoded.
             check_blob = bucket.get_blob(full_filename)
             if not check_blob:
                 logging.error(f'blob does not exist: {full_filename}')
                 any_errors = True
                 continue
-            actual_md5 = check_blob.md5_hash
+            actual_md5 = binascii.hexlify(
+                base64.urlsafe_b64decode(check_blob.md5_hash)
+            ).decode('utf-8')
 
             if expected_md5 == actual_md5:
                 logging.info(f'match: {full_filename}')

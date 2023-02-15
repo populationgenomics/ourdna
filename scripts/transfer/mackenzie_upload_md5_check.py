@@ -33,7 +33,7 @@ def main():
     summary = summary_blob.download_as_string()
 
     any_errors = False
-    for line in summary:
+    for line in summary.splitlines():
         # Skip anything that's not a manifest.
         if not line.endswith(MANIFEST_SUFFIX):
             continue

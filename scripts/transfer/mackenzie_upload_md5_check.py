@@ -15,8 +15,12 @@ CHECKSUM_COLUMN = 'checksum'
 
 def main():
     """Main entrypoint."""
-    # Don't print DEBUG logs from urllib3.connectionpool.
-    logging.getLogger().setLevel(logging.INFO)
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s %(levelname)s %(module)s:%(lineno)d - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        stream=sys.stderr,
+    )
 
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(BUCKET_NAME)

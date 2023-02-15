@@ -52,7 +52,7 @@ def main():
 
         # Check every file listed in the manifest.
         # Filenames are relative to the manifest directory.
-        manifest_dir = manifest_filename[:manifest_filename.rfind('/') + 1]
+        manifest_dir = manifest_filename[: manifest_filename.rfind('/') + 1]
         tsv_reader = csv.DictReader(manifest.splitlines(), delimiter='\t')
         for row in tsv_reader:
             full_filename = manifest_dir + row[FILENAME_COLUMN]

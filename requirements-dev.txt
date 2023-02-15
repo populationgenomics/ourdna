@@ -1,4 +1,5 @@
 bump2version
 black
+google-cloud-storage
 pre-commit
 pylint

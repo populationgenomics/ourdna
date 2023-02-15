@@ -42,7 +42,7 @@ def main():
         manifest_filename = line.split(' ')[-1]
 
         # Read the manifest (TSV).
-        logging.info('reading manifest: {manifest_filename}')
+        logging.info(f'reading manifest: {manifest_filename}')
         manifest_blob = bucket.get_blob(manifest_filename)
         if not manifest_blob:
             logging.error(f'blob does not exist: {manifest_filename}')

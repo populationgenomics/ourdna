@@ -5,7 +5,8 @@ Checks data transfer integrity by comparing MD5 checksums.
 
 This script updates mackenzie_upload_md5_check.py, which was created for the
 first Mackenzie transfer in February 2023. This script simplifies the original,
-as only md5 checksums from a single folder need to be verified.
+as only md5 checksums from a single folder need to be verified. This script was
+executed on May 22, 2024.
 """
 
 import base64

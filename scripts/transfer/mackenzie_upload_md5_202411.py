@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Checks data transfer integrity by comparing MD5 checksums.
-
-This script updates mackenzie_upload_md5_check.py, which was created for the
-first Mackenzie transfer in February 2023. This script simplifies the original,
-as only md5 checksums from a single folder need to be verified. This script was
-executed on May 22, 2024.
-"""
-
 import base64
 import binascii
 import csv
@@ -18,12 +9,29 @@ import sys
 import click
 from google.cloud import storage
 
-UPLOAD_BUCKET = 'cpg-mackenzie-main-upload'
-transfer_folder = 'VCGS/2024_11_transfer/'
-manifest_filename = 'VCGS/2024_11_transfer/cpg_fastq_metadata.csv'
-manifest_bucket = 'cpg-mackenzie-test-upload'
-filename_column = 'filename'
-checksum_column = 'checksum'
+"""
+Checks data transfer integrity by comparing MD5 checksums.
+
+This script tweaks mackenzie_upload_md5_202405.py to align with locations of manifests and uploaded files.
+Usage:
+    python mackenzie_upload_md5_202411.py \
+    --upload-bucket cpg-mackenzie-main-upload \
+    --transfer-folder VCGS/2024_11_transfer/ \
+    --manifest-filename VCGS/2024_11_transfer/cpg_fastq_metadata.csv \
+    --manifest-bucket cpg-mackenzie-test-upload \
+    --filename-column filename \
+    --checksum-column checksum
+
+Options:
+    --upload-bucket TEXT       The bucket where files to check are stored.
+    --transfer-folder TEXT     The folder suffix where files to check are stored.
+    --manifest-filename TEXT   The manifest file to read.
+    --manifest-bucket TEXT     The directory where manifest is stored 
+                               (i.e. manifest may be in test bucket while file uploads are in main).
+    --filename-column TEXT     The column in the manifest with the filename.
+    --checksum-column TEXT     The column in the manifest with the checksum.
+"""
+
 
 @click.command()
 @click.option('--upload-bucket', help='The bucket where files to check are stored.')
@@ -64,7 +72,7 @@ def main(upload_bucket, transfer_folder, manifest_filename, manifest_bucket, fil
         # Filenames are relative to the manifest directory.
         tsv_reader = csv.DictReader(manifest.splitlines())
         for row in tsv_reader:
-            full_filename = UPLOAD_BUCKET + transfer_folder + row[filename_column]
+            full_filename = upload_bucket.name + transfer_folder + row[filename_column]
             expected_md5 = row[checksum_column]
 
             # Read the checksum from the blob. The checksum is base64-encoded.
